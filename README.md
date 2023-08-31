@@ -1,5 +1,5 @@
 # PUI homework
 
-Deployed website: `add the URL to your deployed website`
+Deployed website: `https://tasmiacmu.github.io/pui-hw-tasmia/`
 
-Repository link: `add the URL to this repository`
+Repository link: `https://github.com/tasmiacmu/pui-hw-tasmia'
