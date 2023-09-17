@@ -1,91 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>Product Detail</title>
+      <link href="style.css" rel="stylesheet">
+   </head>
+   <body>
+      <div class="indexgrid">
+         <div class="navgrid">
+            <div class="logo">
+               <a href="index.html"><img alt="logo" src="../assets/logo/logo-01.svg" width="400"></a>
+            </div>
+            <nav>
+               <div class="navproduct"><a class="navselect" href="index.html">PRODUCTS</a></div>
+               <div class="navcart"><a href="shoppingcart.html">CART</a></div>
+               <div class="linebreak">
+                  <hr>
+               </div>
+               <h2>Original cinnamon roll</h2>
+            </nav>
+         </div>
+         <div class="productdetail">
 
-<head>
-  <meta charset="UTF-8">
-  <title>Product Detail</title>
-  <link href="style.css" rel="stylesheet">
-
-</head>
-
-  <body>
-
-    <div class="indexgrid">
-
-    <div class="logo">
-      <a href="index.html">
-        <img src="../assets/logo/logo-01.svg" width="400" alt="logo"/>
-  </a>
-    </div>
-  
-    <div class="linebreak">
-      <hr class="solid">
-    </div>
-  
-      <nav>
-        <br><a href="index.html" class="navselect">PRODUCTS</a>
-        <br><a href="shoppingcart.html">CART</a>
-      </nav>
-
-
-
-      <div class="productdetail">
-  
-        <h2>Original Cinnamon Roll</h2>
-
-        <img src="../assets/products/original-cinnamon-roll.jpg" width="600" alt="original cinnamon roll">
-
-        <div class="dropdown">
-
-        <p>Customize our delicious hand-made cinnamon roll to your liking!</p>
-
+            <div class="productimg">
+            <img src="../assets/products/original-cinnamon-roll.jpg" width="600" alt="original cinnamon roll"/>
+            </div>
+           
+            <p class="description">Customize our delicious hand-made cinnamon roll to your liking!</p>
+            <div class="dropdown">
+               <!-- w3 schools -->
+               <form action="/action_page.php">
+                  <label for="glaze">Glazing:<br></label>
+                  <select name="glaze" id="glaze">
+                     <option value="keeporiginal">Keep Original</option>
+                     <option value="sugarmilk">Sugar Milk</option>
+                     <option value="vanillamilk">Vanilla Milk</option>
+                     <option value="doublechocolate">Double Chocolate</option>
+                  </select>
+               </form>
+               <br>
+               <form action="/action_page.php">
+                  <label for="psize">Pack Size:<br></label>
+                  <select name="psize" id="psize">
+                     <option value="one">1</option>
+                     <option value="three">3</option>
+                     <option value="six">6</option>
+                     <option value="twelve">12</option>
+                  </select>
+               </form>
+            </div>
+         
+            <div class="buttonprice">
+         <div class="productprice">
+            <p>
+               $2.49
+            </p>
+          </div>
+            <button type="button" class="button" id="button1">Add to Cart</button>
         
-
-          <!-- w3 schools -->
-
-          <form action="/action_page.php">
-            <label for="glaze">Glazing:<br></label>
-            <select name="glaze" id="glaze">
-              <option value="keeporiginal">Keep Original</option>
-              <option value="sugarmilk">Sugar Milk</option>
-              <option value="vanillamilk">Vanilla Milk</option>
-              <option value="doublechocolate">Double Chocolate</option>
-            </select>
+          </div>
         
-          </form>
-
-          <br>
-
-          <form action="/action_page.php">
-            <label for="psize">Pack Size:<br></label>
-            <select name="psize" id="psize">
-              <option value="one">1</option>
-              <option value="three">3</option>
-              <option value="six">6</option>
-              <option value="twelve">12</option>
-            </select>
-  
-          </form>
-          
         </div>
-
       </div>
-
-      <div class="buttonprice">
-        <p>
-          $2.49
-        </p>
-
-        
-
-        <button type="button" class="button">Add to Cart</button>
-
-      
-
-    </div>
-    
-
-    </div>
-
-  </body>
+   </body>
 </html>
