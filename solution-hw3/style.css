@@ -1,0 +1,290 @@
+p, br {
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+}
+h2 {
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 36px;
+  text-align: left;
+  font-weight: normal;
+}
+.navigation a {
+  text-align: right;
+}
+hr {
+  border: 2px solid black;
+}
+.remove {
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 12px;
+  text-decoration: underline;
+  font-weight: 600;
+}
+.logo img {
+  border: 0px solid;
+}
+a {
+  text-decoration: underline;
+  color: black;
+}
+img {
+  border: 2px black solid;
+}
+.button {
+ /* referenced from w3schools */
+  background-color: yellow;
+  border: 2px black solid;
+  color: black;
+  padding: 10px 20px;
+  text-align: center;
+  display: inline-block;
+  font-size: 24px;
+  font-weight: bold;
+  font-family: 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+}
+.navselect {
+  background-color: yellow;
+  font-weight: 700;
+  text-decoration: none;
+}
+.item {
+  padding: 20px;
+  justify-content: center;
+  margin: 10px;
+}
+/* item hover information */
+.item:hover {
+  background-color: yellow;
+}
+.item:hover a {
+  font-weight: 700;
+}
+.price a {
+  text-decoration: none;
+}
+.item:hover .price a {
+  text-decoration: none;
+  font-weight: 400;
+}
+.indexgrid {
+ /* container for everything */
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+}
+.navgrid {
+ /* top navigation grid */
+  grid-column: 1 / 4;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  grid-auto-rows: minmax(100px, auto);
+}
+.logo {
+  grid-column: 1;
+  grid-row: 1;
+}
+.dropdown {
+  margin-top: 10px;
+}
+.dropdown select {
+ /* https://blog.logrocket.com/creating-custom-select-dropdown-css/ */
+  width: 100%;
+  padding: 10px;
+  font-size: 16px;
+  border: 1px solid black;
+  background-color: white;
+  color: black;
+  margin-top: 10px;
+}
+.dropdown label {
+  margin-top: 50px;
+  margin-bottom: 5px;
+}
+.dropdown select option {
+  padding: 5px;
+}
+nav {
+ /* top right navigation grid */
+  grid-column: 2 / 4;
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-template-rows: 50px 20px 50px;
+}
+.navproduct a, .navcart a {
+  font-size: 24px;
+  text-decoration: none;
+}
+.navproduct {
+  grid-column: 5;
+  grid-row: 1;
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  justify-content: center;
+  padding: 30px;
+}
+.navcart {
+  grid-column: 6;
+  grid-row: 1;
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 16px;
+  padding: 30px;
+}
+.linebreak {
+  grid-column: 1 / 7;
+  grid-row: 2;
+  padding-top: 40px;
+}
+h2 {
+  grid-column: 1 / 7;
+  grid-row: 3;
+  padding-top: 40px;
+}
+.products {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-gap: 20px;
+  grid-auto-rows: minmax(100px, auto);
+  justify-items: center;
+}
+#item1 {
+  grid-column: 2;
+  grid-row: 1;
+}
+#item2 {
+  grid-column: 3;
+  grid-row: 1;
+}
+#item3 {
+  grid-column: 4;
+  grid-row: 1;
+}
+#item4 {
+  grid-column: 2;
+  grid-row: 2;
+}
+#item5 {
+  grid-column: 3;
+  grid-row: 2;
+}
+#item6 {
+  grid-column: 4;
+  grid-row: 2;
+}
+.shopcart {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-auto-rows: auto auto 20px 70px auto;
+  grid-gap: 20px;
+  padding: 40px;
+}
+#cartimg1 {
+  grid-column: 3;
+  grid-row: 1;
+}
+#cartimg2 {
+  grid-column: 3;
+  grid-row: 2;
+}
+#cartinfo1 {
+  grid-column: 4 / 7;
+  grid-row: 1;
+}
+#cartinfo2 {
+  grid-column: 4 / 7;
+  grid-row: 2;
+}
+#cartprice1 {
+  grid-column: 6;
+  grid-row: 1;
+  justify-self: end;
+}
+#cartprice2 {
+  grid-column: 6;
+  grid-row: 2;
+  justify-self: end;
+}
+.cartline {
+  grid-column: 3 / 7;
+  grid-row: 3;
+}
+.checkout {
+  grid-column: 3 / 7;
+  grid-row: 4;
+  justify-self: end;
+}
+.checkoutbutton {
+  grid-column: 3 / 7;
+  grid-row: 5;
+  justify-self: end;
+}
+.checkout p {
+  text-align: right;
+  word-spacing: 300px;
+}
+.productdetail {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  grid-auto-rows: minmax(100px, auto);
+  justify-items: start;
+}
+.productdetail {
+  grid-column: 1 / 4;
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(100px, auto);
+  margin-right: 100px;
+  margin-left: 100px;
+  margin-top: 50px;
+}
+.productimg {
+  grid-column: 1;
+  grid-row: 1 / 6;
+  justify-self: center;
+}
+.description {
+  grid-column: 2;
+  grid-row: 1;
+  padding: 30px;
+}
+.dropdown {
+  grid-column: 2;
+  grid-row: 2;
+  font-family: Helvetica, 'Gill Sans', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 24px;
+}
+.buttonprice {
+  grid-column: 2;
+  grid-row: 4;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: minmax(100px, auto);
+  justify-items: start;
+  align-items: start;
+}
+.productprice {
+  grid-column: 1;
+  grid-row: 1;
+  font-weight: 700;
+}
+#button1 {
+  margin-left: -20px;
+  grid-column: 2;
+  grid-row: 1;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  height: auto;
+  margin-top: 15px;
+}
+.productdetail .dropdown, .productdetail .buttonprice {
+  margin-left: 30px;
+}
