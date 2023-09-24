@@ -4,7 +4,7 @@
       <meta charset="UTF-8">
       <title>Product Detail</title>
       <link href="style.css" rel="stylesheet">
-      <script src="price.js" type="text/javascript"></script>
+      <script src="price.js"></script>
      
    </head>
    <body>
@@ -35,7 +35,7 @@
                <!-- w3 schools -->
                <form action="/action_page.php">
                   <label for="glaze">Glazing:<br></label>
-                  <select name="glaze" id="glaze" onchange="glazing_change(this)">
+                  <select name="glaze" id="glaze">
              
                   </select>
                </form>
@@ -51,7 +51,7 @@
             <div class="buttonprice">
          <div class="productprice">
             <p>
-               $2.49
+               <span id="totalprice">$2.49</span>
             </p>
           </div>
             <button type="button" class="button" id="button1">Add to Cart</button>
