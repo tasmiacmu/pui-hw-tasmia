@@ -40,6 +40,22 @@ document.addEventListener("DOMContentLoaded", function() {
         pack_select.appendChild(option);
      }
 
+ 
+  
+function glazing_change(element) {
+
+  let price_change = element.value;
+  let new_price = price_change + 2.49; 
+  return new_price; 
+  
+}
+
+console.log(glazing_change);
+
+
+
+
+
 
  });
  
