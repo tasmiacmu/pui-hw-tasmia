@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+document.addEventListener("DOMContentLoaded", function () { //https://www.javascripttutorial.net/javascript-dom/javascript-domcontentloaded/
     let glaze_options = {
         "Keep original": 0,
         "Sugar milk": 0,
