@@ -1,6 +1,6 @@
-document.addEventListener("DOMContentLoaded", function () { //https://www.javascripttutorial.net/javascript-dom/javascript-domcontentloaded/
+document.addEventListener("DOMContentLoaded", function() { //https://www.javascripttutorial.net/javascript-dom/javascript-domcontentloaded/
 
-// establish glaze and pack options
+    // establish glaze and pack options
 
     let glaze_options = {
         "Keep original": 0,
@@ -15,6 +15,9 @@ document.addEventListener("DOMContentLoaded", function () { //https://www.javasc
         "6": 5,
         "12": 10,
     };
+
+
+
 
     let glaze_select = document.getElementById('glaze');
     let pack_select = document.getElementById('psize');
@@ -47,19 +50,19 @@ document.addEventListener("DOMContentLoaded", function () { //https://www.javasc
 
     let cart = [];
 
-let query_string = window.location.search;
-let params = new URLSearchParams(query_string);
-let roll_type = params.get('roll');
-let current_roll = rolls[roll_type];
+    let query_string = window.location.search;
+    let params = new URLSearchParams(query_string);
+    let roll_type = params.get('roll');
+    let current_roll = rolls[roll_type];
 
-// update header
+    // update header
 
-const header_element = document.querySelector('#productheader');
-header_element.innerText = roll_type + " Cinnamon Roll";
+    const header_element = document.querySelector('#productheader');
+    header_element.innerText = roll_type + " Cinnamon Roll";
 
-// update image
+    // update image
 
-let roll_image = document.querySelector('.productimg img'); 
+    let roll_image = document.querySelector('.productimg img');
     roll_image.src = '../assets/products/' + current_roll.imageFile;
 
     // calculate price
@@ -84,20 +87,35 @@ let roll_image = document.querySelector('.productimg img');
     pack_select.onchange = calculate_price;
 
 
-    // add roll to cart
+    // add roll to cart array
 
     class Roll {
         constructor(roll_type, roll_glazing, size_pack, base_price) {
             this.type = roll_type;
-            this.glazing =  roll_glazing;
+            this.glazing = roll_glazing;
             this.size = size_pack;
-            this.basePrice = base_price;
+            this.base_price = base_price;
         }
     }
 
-    let new_roll = new Roll; 
+
+    let cart_button = document.getElementById('button1');
+
+    function add_cart() {
+
+        let selected_glaze_key = glaze_select.options[glaze_select.selectedIndex].text;
+        let selected_pack_key = pack_select.options[pack_select.selectedIndex].text;
+        // https://developer.mozilla.org/en-US/docs/Web/API/HTMLSelectElement/selectedIndex
+
+        let new_roll = new Roll(roll_type, selected_glaze_key, selected_pack_key, current_roll.basePrice);
+        cart.push(new_roll);
+        console.log(cart);
+    }
 
 
-    
+    cart_button.onclick = add_cart;
+
+
+
 
 });
