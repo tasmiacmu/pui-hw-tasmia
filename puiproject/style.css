@@ -1,0 +1,20 @@
+
+body {
+  background-color: #be9167;
+  background-image: url("parchment.jpeg");
+  background-repeat: repeat-y;
+  text-align: center;
+  align-content: center;
+}
+
+h1 {
+  font-family: 'Pixelify Sans', sans-serif;
+  color: #632b38;
+  font-size: 35px;
+}
+
+p {
+  font-family: 'Pixelify Sans', sans-serif;
+  color: #403125;
+  font-size: 15px;
+}
