@@ -99,6 +99,9 @@ function create() {
         repeat: -1
     });
 
+    // add start and narrative scenes later
+    /*
+
     const start = this.add.sprite(400, 300, 'sky').setInteractive();
 
     start.on('pointerdown', function (pointer) {
@@ -114,6 +117,8 @@ function create() {
         this.clearTint();
     });
     
+
+    */
 
     cursors = this.input.keyboard.createCursorKeys();
 
