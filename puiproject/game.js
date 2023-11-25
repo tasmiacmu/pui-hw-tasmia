@@ -23,23 +23,52 @@ var platforms;
 var player;
 var cursors;
 
+
 var game = new Phaser.Game(config);
 
 function preload() {
-    this.load.image('sky', 'assets/purplebg.png');
+
+
+/*
+Royalty Free Music from Tunetank.com
+Track: Arabian Night by Evan Splash
+https://tunetank.com/track/207-arabian-night/
+
+*/
+
+this.load.audio("audio_egypt", ["assets/egypt.mp3"])
+
+    this.load.image('background', 'assets/bg.png');
     this.load.image('test', 'assets/bomb.png');
     this.load.image('ground', 'assets/egyptground.png');
     this.load.image('base', 'assets/egyptbaseground.png');
     this.load.image('step', 'assets/small_tiles.png');
     this.load.image('bricks', 'assets/morebricks.png');
+    this.load.image('mummy', 'assets/mummytest.png');
+    this.load.image('flashlight', 'assets/blackcircle.png');
+    this.load.image('parchment', 'assets/parchment.png');
 
-    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.spritesheet('dude', 'assets/mummysprite.png', { frameWidth: 32, frameHeight: 48 });
 }
 
 function create() {
    
+    this.music = this.sound.add("audio_egypt");
 
-    
+    var musicConfig = {
+        mute: false,
+        volume: 1, 
+        rate: 1,
+        detune: 0,
+        seek: 0,
+        loop: true,
+        delay: 0
+    }
+
+    this.music.play(musicConfig);
+
+    this.add.image(600, 500, 'background');
+   
 
     // Set world bounds larger than the frame size
     this.physics.world.setBounds(0, 0, 1200, 1000);
@@ -82,7 +111,7 @@ function create() {
     this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
-        frameRate: 10,
+        frameRate: 5,
         repeat: -1
     });
 
@@ -95,14 +124,32 @@ function create() {
     this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
-        frameRate: 10,
+        frameRate: 5,
         repeat: -1
     });
 
-    // add start and narrative scenes later
-    /*
+ 
 
-    const start = this.add.sprite(400, 300, 'sky').setInteractive();
+    cursors = this.input.keyboard.createCursorKeys();
+
+    this.physics.add.collider(player, platforms);
+
+    // Make the camera follow the player within the extended world bounds
+    this.cameras.main.setBounds(0, 0, 1200, 900);
+    this.cameras.main.startFollow(player);
+
+
+    flashlight = this.add.image(player.x, player.y, 'flashlight');
+   
+    this.add.image(117, 500, 'parchment').setScrollFactor(0);
+    this.add.image(285, 500, 'parchment').setScrollFactor(0).setFlipY(true);
+    this.add.image(453, 500, 'parchment').setScrollFactor(0);
+    this.add.image(621, 500, 'parchment').setScrollFactor(0).setFlipY(true).setFlipX(true);
+    this.add.image(789, 500, 'parchment').setScrollFactor(0).setFlipY(true);
+    
+   
+/*
+    const start = this.add.sprite(400, 300, 'background').setInteractive();
 
     start.on('pointerdown', function (pointer) {
         this.setTint(0xff0000);
@@ -116,17 +163,15 @@ function create() {
     start.on('pointerup', function (pointer) {
         this.clearTint();
     });
-    
-
     */
 
-    cursors = this.input.keyboard.createCursorKeys();
+   
+      
 
-    this.physics.add.collider(player, platforms);
 
-    // Make the camera follow the player within the extended world bounds
-    this.cameras.main.setBounds(0, 0, 1200, 900);
-    this.cameras.main.startFollow(player);
+   
+
+    
 }
 
 function update() {
@@ -149,5 +194,9 @@ function update() {
     if (player.x > config.width) {
         // Example: platforms.create(new_x, new_y, 'ground');
     }
+    flashlight.x = player.x + 25;
+    flashlight.y = player.y + 25;
+
+    
 }
 
