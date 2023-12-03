@@ -52,6 +52,12 @@ https://tunetank.com/track/207-arabian-night/
     this.load.image('mummy', 'assets/mummytest.png');
     this.load.image('flashlight', 'assets/blackcircle.png');
     this.load.image('parchment', 'assets/parchment.png');
+    this.load.image('column', 'assets/column.png');
+    this.load.image('palm', 'assets/palmtree.png');
+    this.load.image('p1', 'assets/painting1.png');
+    this.load.image('p2', 'assets/painting2.png');
+    this.load.image('p3', 'assets/painting3.png');
+    this.load.image('crate', 'assets/crate.png');
 
     // clues
     this.load.image('nefertiti', 'assets/nefertiti.png');
@@ -111,6 +117,29 @@ function create() {
     platforms.create(160, 225, 'ground');
     platforms.create(1050, 300, 'step');
 
+    platforms.create(200, 625, 'crate');
+    platforms.create(1200, 625, 'crate');
+    platforms.create(250, 392, 'crate');
+    platforms.create(750, 167, 'crate');
+    platforms.create(750, 103, 'crate');
+    platforms.create(875, 167, 'crate');
+
+    platforms.create(650, 167, 'crate');
+
+    this.add.image(50, 600, 'column');
+    this.add.image(1000, 600, 'column');
+    this.add.image(800, 340, 'column');
+
+    this.add.image(700, 330, 'palm');
+    this.add.image(1150, 330, 'palm');
+    this.add.image(200, 135, 'palm');
+    this.add.image(600, 135, 'palm');
+    this.add.image(325, 362, 'palm');
+
+    this.add.image(200, 325, 'p1');
+    this.add.image(500, 120, 'p2');
+    this.add.image(1100, 525, 'p3');
+
     player = this.physics.add.sprite(100, 500, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -157,6 +186,7 @@ function create() {
     //add clue sarcophagus
 
     sarcophagus = this.physics.add.sprite(300, 510, 'sarcophagus');
+    sarcophagus = sarcophagus.setFlipX(true);
     clues.push(sarcophagus);
     this.physics.add.collider(sarcophagus, platforms);
     this.physics.add.collider(player, sarcophagus, handleCollisionS, null, this);
@@ -170,7 +200,7 @@ function create() {
 
     //add clue sphinx
 
-  sphinx = this.physics.add.sprite(1000, 280, 'sphinx');
+  sphinx = this.physics.add.sprite(1125, 280, 'sphinx');
   clues.push(sphinx);
     this.physics.add.collider(sphinx, platforms);
     this.physics.add.collider(player, sphinx, handleCollisionX, null, this);
