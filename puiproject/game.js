@@ -23,6 +23,15 @@ var cursors;
 var flashlight;
 var movingStep1;
 var score = 0; 
+var heart3, heart2, heart1; // Separate heart variables
+var maxHearts = 3;
+var currentHearts;
+var gameOver;
+
+
+
+
+
 
 
 // clues
@@ -32,6 +41,7 @@ var sarcophagus;
 var rosetta;
 var zodiac;
 var sphinx;
+var water;
 
 var game = new Phaser.Game(config);
 
@@ -44,7 +54,13 @@ https://tunetank.com/track/207-arabian-night/
 
 */
     this.load.audio("audio_egypt", ["assets/egypt.mp3"])
+    this.load.audio("guitar", ["assets/guitar.mp3"])
+    this.load.audio("lose", ["assets/loss.mp3"])
+    this.load.audio("found", ["assets/findclue.mp3"])
+
+    
     this.load.image('background', 'assets/bg.png');
+    this.load.image('end', 'assets/gameover.png');
     this.load.image('ground', 'assets/egyptground.png');
     this.load.image('base', 'assets/egyptbaseground.png');
     this.load.image('step', 'assets/small_tiles.png');
@@ -58,6 +74,14 @@ https://tunetank.com/track/207-arabian-night/
     this.load.image('p2', 'assets/painting2.png');
     this.load.image('p3', 'assets/painting3.png');
     this.load.image('crate', 'assets/crate.png');
+    this.load.image('cat', 'assets/cat.png');
+    this.load.image('figure', 'assets/figure.png');
+    this.load.image('tallpot', 'assets/tallpot.png');
+    this.load.image('widepot', 'assets/widepot.png');
+    this.load.image('symbol', 'assets/symbol.png');
+    this.load.image('water', 'assets/water.png');
+    this.load.image('heart', 'assets/heart.png');
+
 
     // clues
     this.load.image('nefertiti', 'assets/nefertiti.png');
@@ -83,7 +107,7 @@ function create() {
 
     var musicConfig = {
         mute: false,
-        volume: 1, 
+        volume: 0.5, 
         rate: 1,
         detune: 0,
         seek: 0,
@@ -93,12 +117,17 @@ function create() {
 
     this.music.play(musicConfig);
 
+this.healthSound = this.sound.add("guitar");
+this.loseSound = this.sound.add("lose", { rate: 0.5 });
+this.foundSound = this.sound.add("found");
+
 
 
     this.add.image(600, 500, 'background');
     this.physics.world.setBounds(0, 0, 1200, 1000);
 
     platforms = this.physics.add.staticGroup();
+   water = platforms.create(780, 875, 'water');
     platforms.create(150, 730, 'base');
     platforms.create(470, 730, 'base');
     platforms.create(1100, 730, 'base');
@@ -116,6 +145,8 @@ function create() {
     platforms.create(480, 225, 'ground');
     platforms.create(160, 225, 'ground');
     platforms.create(1050, 300, 'step');
+
+    
 
     platforms.create(200, 625, 'crate');
     platforms.create(1200, 625, 'crate');
@@ -140,9 +171,19 @@ function create() {
     this.add.image(500, 120, 'p2');
     this.add.image(1100, 525, 'p3');
 
+    this.add.image(500, 503, 'tallpot');
+    this.add.image(600, 625, 'symbol');
+    this.add.image(900, 365, 'cat');
+    this.add.image(155, 167, 'widepot');
+    this.add.image(1185, 567, 'figure');
+
+    
+
     player = this.physics.add.sprite(100, 500, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
+
+    this.physics.add.collider(player, platforms, handleWaterCollision, null, this);
 
     this.anims.create({
         key: 'left',
@@ -214,6 +255,17 @@ function create() {
     flashlight = this.add.image(player.x, player.y, 'flashlight');
 
   
+  /*
+    this.add.image(50, 50, 'heart').setScrollFactor(0);
+    this.add.image(100, 50, 'heart').setScrollFactor(0);
+    this.add.image(150, 50, 'heart').setScrollFactor(0);
+*/
+
+currentHearts = maxHearts;
+
+heart1 = this.add.sprite(50, 50, 'heart').setScrollFactor(0);
+heart2 = this.add.sprite(100, 50, 'heart').setScrollFactor(0);
+heart3 = this.add.sprite(150, 50, 'heart').setScrollFactor(0);
   
 
     this.add.image(117, 500, 'parchment').setScrollFactor(0);
@@ -239,6 +291,8 @@ function create() {
         this.clearTint();
     });
     */
+
+    gameOver = this.add.image(450, 600, 'end').setVisible(false);
 
     
     
@@ -274,12 +328,26 @@ function update() {
         });
     }
 
+    if (currentHearts === 0) {
+
+        if (!this.loseSound.isPlaying) {
+            this.loseSound.play();
+        }
+        
+        gameOver = this.add.image(450, 600, 'end').setVisible(true);
+        
+
+    }
+
+ 
+  
     flashlight.x = player.x + 25;
     flashlight.y = player.y + 25;
 }
 
 function handleCollision() {
     if (!nefertiti.collided) {
+        this.foundSound.play();
         nefertiti.collided = true; // Set the flag to true to indicate collision
         this.tweens.add({
             targets: nefertiti,
@@ -297,6 +365,7 @@ function handleCollision() {
 
 function handleCollisionS() {
     if (!sarcophagus.collided) {
+        this.foundSound.play();
         sarcophagus.collided = true;
         this.tweens.add({
             targets: sarcophagus,
@@ -314,6 +383,7 @@ function handleCollisionS() {
 
 function handleCollisionR () {
     if (!rosetta.collided) {
+        this.foundSound.play();
         rosetta.collided = true;
         this.tweens.add({
             targets: rosetta,
@@ -331,6 +401,7 @@ function handleCollisionR () {
 
 function handleCollisionZ () {
     if (!zodiac.collided) {
+        this.foundSound.play();
         zodiac.collided = true;
         this.tweens.add({
             targets: zodiac,
@@ -348,6 +419,7 @@ function handleCollisionZ () {
 
 function handleCollisionX () {
     if (!sphinx.collided) {
+        this.foundSound.play();
         sphinx.collided = true;
         this.tweens.add({
             targets: sphinx,
@@ -367,3 +439,36 @@ function incrementScore() {
     score += 1;
     console.log('Score:', score);
 }
+
+
+
+function handleWaterCollision(player, waterPlatform) {
+    if (waterPlatform === water) {
+        // Check if the player has remaining hearts
+        if (currentHearts > 0) {
+            // Update hearts
+            currentHearts--;
+            this.healthSound.play();
+
+            // Destroy the corresponding heart
+            switch (currentHearts) {
+                case 2:
+                    heart3.destroy();
+                    break;
+                case 1:
+                    heart2.destroy();
+                    break;
+                case 0:
+                    heart1.destroy();
+                    break;
+            }
+
+            // Reset player position to x: 200, y: 500
+            player.setPosition(200, 500);
+
+            // Add any additional logic you want when the player collides with water
+            // For example, you can decrease health, play a sound, etc.
+        }
+    }
+}
+
