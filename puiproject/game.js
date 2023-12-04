@@ -61,6 +61,7 @@ https://tunetank.com/track/207-arabian-night/
     
     this.load.image('background', 'assets/bg.png');
     this.load.image('end', 'assets/gameover.png');
+    this.load.image('start', 'assets/startscene.png');
     this.load.image('faq', 'assets/howtoplay.png');
     this.load.image('ground', 'assets/egyptground.png');
     this.load.image('base', 'assets/egyptbaseground.png');
@@ -277,21 +278,25 @@ heart3 = this.add.sprite(150, 50, 'heart').setScrollFactor(0);
 
 
   
-    const start = this.add.sprite(450, 600, 'faq').setInteractive();
 
-    start.on('pointerdown', function (pointer) {
-        this.setTint(0xff0000);
+
+  
+
+    const faq = this.add.sprite(450, 600, 'faq').setInteractive();
+
+    faq.on('pointerdown', function (pointer) {
         this.setVisible(false); // Set the visibility to false when clicked
+        
     });
-    
-    start.on('pointerout', function (pointer) {
-        this.clearTint();
+
+    const begin = this.add.sprite(450, 600, 'start').setInteractive();
+
+    begin.on('pointerdown', function (pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+        
     });
-    
-    start.on('pointerup', function (pointer) {
-        this.clearTint();
-    });
- 
+   
+
 
     gameOver = this.add.image(450, 600, 'end').setVisible(false);
 
