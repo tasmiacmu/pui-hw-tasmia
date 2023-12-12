@@ -1,3 +1,4 @@
+// Using Phaser 3, I'm configuring a new game. This includes establishing the dimensions, physics, and components of the scene.
 var config = {
     type: Phaser.AUTO,
     width: 900,
@@ -6,7 +7,9 @@ var config = {
     physics: {
         default: 'arcade',
         arcade: {
-            gravity: { y: 300 },
+            gravity: {
+                y: 300
+            },
             debug: false
         }
     },
@@ -17,24 +20,21 @@ var config = {
     }
 };
 
+// Variables I need to access across the game
 var platforms;
 var player;
 var cursors;
 var flashlight;
-var movingStep1;
-var score = 0; 
-var heart3, heart2, heart1; // Separate heart variables
+var score = 0;
+var heart3, heart2, heart1;
 var maxHearts = 3;
 var currentHearts;
 var gameOver;
+var winner;
+var cluesCollected;
 
 
-
-
-
-
-
-// clues
+// Clue variables
 var clues = [];
 var nefertiti;
 var sarcophagus;
@@ -45,6 +45,7 @@ var water;
 
 var game = new Phaser.Game(config);
 
+// Preload loads visual and audio assets for the game
 function preload() {
 
     /*
@@ -53,21 +54,38 @@ Track: Arabian Night by Evan Splash
 https://tunetank.com/track/207-arabian-night/
 
 */
+
+    // Free to use sound effects https://mixkit.co/free-sound-effects/game/
+    // Used this tutorial to load and use audio https://www.youtube.com/watch?v=SRqKOccMWbc
     this.load.audio("audio_egypt", ["assets/egypt.mp3"])
     this.load.audio("guitar", ["assets/guitar.mp3"])
     this.load.audio("lose", ["assets/loss.mp3"])
     this.load.audio("found", ["assets/findclue.mp3"])
+    this.load.audio("levelwinner", ["assets/levelwinner.mp3"])
 
-    
+    // Narrative and informational scenes
     this.load.image('background', 'assets/bg.png');
+    this.load.image('dream', 'assets/dream.png');
+    this.load.image('awake', 'assets/wakeup.png');
+    this.load.image('escape1', 'assets/escape1.png');
+    this.load.image('escape2', 'assets/escape2.png');
+    this.load.image('shouldegypt', 'assets/shouldbeegypt.png');
+    this.load.image('cluescollected', 'assets/cluescollected.png');
     this.load.image('end', 'assets/gameover.png');
+    this.load.image('winner', 'assets/youwon.png');
     this.load.image('start', 'assets/startscene.png');
     this.load.image('faq', 'assets/howtoplay.png');
+
+    // Tiles 
     this.load.image('ground', 'assets/egyptground.png');
     this.load.image('base', 'assets/egyptbaseground.png');
     this.load.image('step', 'assets/small_tiles.png');
     this.load.image('bricks', 'assets/morebricks.png');
+
+    //Sprite 
     this.load.image('mummy', 'assets/mummytest.png');
+
+    // Other image assets
     this.load.image('flashlight', 'assets/blackcircle.png');
     this.load.image('parchment', 'assets/parchment.png');
     this.load.image('column', 'assets/column.png');
@@ -97,19 +115,21 @@ https://tunetank.com/track/207-arabian-night/
     this.load.image('sphinx', 'assets/sphinx.png');
     this.load.image('sphclue', 'assets/sphinxclue.png');
 
-    this.load.spritesheet('dude', 'assets/mummysprite.png', { frameWidth: 32, frameHeight: 48 });
+    this.load.spritesheet('dude', 'assets/mummysprite.png', {
+        frameWidth: 32,
+        frameHeight: 48
+    });
 }
 
+// Establishing the scene
 function create() {
 
-      // Background music
-
-   
+    // Background music
     this.music = this.sound.add("audio_egypt");
 
     var musicConfig = {
         mute: false,
-        volume: 0.5, 
+        volume: 0.5,
         rate: 1,
         detune: 0,
         seek: 0,
@@ -119,17 +139,21 @@ function create() {
 
     this.music.play(musicConfig);
 
-this.healthSound = this.sound.add("guitar");
-this.loseSound = this.sound.add("lose", { rate: 0.5 });
-this.foundSound = this.sound.add("found");
+    // Sound effects
+    this.healthSound = this.sound.add("guitar");
+    this.loseSound = this.sound.add("lose", {
+        rate: 0.5
+    });
+    this.winSound = this.sound.add("levelwinner");
+    this.foundSound = this.sound.add("found");
 
 
-
+    // Building the background and tilemap
     this.add.image(600, 500, 'background');
     this.physics.world.setBounds(0, 0, 1200, 1000);
 
     platforms = this.physics.add.staticGroup();
-   water = platforms.create(780, 875, 'water');
+    water = platforms.create(780, 875, 'water');
     platforms.create(150, 730, 'base');
     platforms.create(470, 730, 'base');
     platforms.create(1100, 730, 'base');
@@ -148,8 +172,7 @@ this.foundSound = this.sound.add("found");
     platforms.create(160, 225, 'ground');
     platforms.create(1050, 300, 'step');
 
-    
-
+    // Adding obstacles and decorative elements
     platforms.create(200, 625, 'crate');
     platforms.create(1200, 625, 'crate');
     platforms.create(250, 392, 'crate');
@@ -179,8 +202,9 @@ this.foundSound = this.sound.add("found");
     this.add.image(155, 167, 'widepot');
     this.add.image(1185, 567, 'figure');
 
-    
 
+    // Adding the sprite and collision properties
+    // https://phaser.io/tutorials/making-your-first-phaser-3-game/part1 -> Used this tutorial as a base as to how to add a tilemap, player movement, and sprite sheet
     player = this.physics.add.sprite(100, 500, 'dude');
     player.setBounce(0.2);
     player.setCollideWorldBounds(true);
@@ -189,20 +213,29 @@ this.foundSound = this.sound.add("found");
 
     this.anims.create({
         key: 'left',
-        frames: this.anims.generateFrameNumbers('dude', { start: 0, end: 3 }),
+        frames: this.anims.generateFrameNumbers('dude', {
+            start: 0,
+            end: 3
+        }),
         frameRate: 5,
         repeat: 3
     });
 
     this.anims.create({
         key: 'turn',
-        frames: [{ key: 'dude', frame: 4 }],
+        frames: [{
+            key: 'dude',
+            frame: 4
+        }],
         frameRate: 20
     });
 
     this.anims.create({
         key: 'right',
-        frames: this.anims.generateFrameNumbers('dude', { start: 5, end: 8 }),
+        frames: this.anims.generateFrameNumbers('dude', {
+            start: 5,
+            end: 8
+        }),
         frameRate: 5,
         repeat: 3
     });
@@ -213,18 +246,18 @@ this.foundSound = this.sound.add("found");
 
 
     // add clue nefertiti
-    
+
     nefertiti = this.physics.add.sprite(400, 110, 'nefertiti');
     clues.push(nefertiti);
     this.physics.add.collider(nefertiti, platforms);
     this.physics.add.collider(player, nefertiti, handleCollision, null, this);
 
-     // add clue rosetta
-    
-     rosetta = this.physics.add.sprite(1100, 400, 'rosetta');
-     clues.push(rosetta);
-     this.physics.add.collider(rosetta, platforms);
-     this.physics.add.collider(player, rosetta, handleCollisionR, null, this);
+    // add clue rosetta
+
+    rosetta = this.physics.add.sprite(1100, 400, 'rosetta');
+    clues.push(rosetta);
+    this.physics.add.collider(rosetta, platforms);
+    this.physics.add.collider(player, rosetta, handleCollisionR, null, this);
 
     //add clue sarcophagus
 
@@ -243,33 +276,28 @@ this.foundSound = this.sound.add("found");
 
     //add clue sphinx
 
-  sphinx = this.physics.add.sprite(1125, 280, 'sphinx');
-  clues.push(sphinx);
+    sphinx = this.physics.add.sprite(1125, 280, 'sphinx');
+    clues.push(sphinx);
     this.physics.add.collider(sphinx, platforms);
     this.physics.add.collider(player, sphinx, handleCollisionX, null, this);
 
 
 
-
+    // Camera follows players
     this.cameras.main.setBounds(0, 0, 1200, 900);
     this.cameras.main.startFollow(player);
 
+    // Flashlight around player 
     flashlight = this.add.image(player.x, player.y, 'flashlight');
 
-  
-  /*
-    this.add.image(50, 50, 'heart').setScrollFactor(0);
-    this.add.image(100, 50, 'heart').setScrollFactor(0);
-    this.add.image(150, 50, 'heart').setScrollFactor(0);
-*/
+    // Hearts UI
+    currentHearts = maxHearts;
 
-currentHearts = maxHearts;
+    heart1 = this.add.sprite(50, 50, 'heart').setScrollFactor(0);
+    heart2 = this.add.sprite(100, 50, 'heart').setScrollFactor(0);
+    heart3 = this.add.sprite(150, 50, 'heart').setScrollFactor(0);
 
-heart1 = this.add.sprite(50, 50, 'heart').setScrollFactor(0);
-heart2 = this.add.sprite(100, 50, 'heart').setScrollFactor(0);
-heart3 = this.add.sprite(150, 50, 'heart').setScrollFactor(0);
-  
-
+    // Clues UI
     this.add.image(117, 500, 'parchment').setScrollFactor(0);
     this.add.image(285, 500, 'parchment').setScrollFactor(0).setFlipY(true);
     this.add.image(453, 500, 'parchment').setScrollFactor(0);
@@ -277,36 +305,71 @@ heart3 = this.add.sprite(150, 50, 'heart').setScrollFactor(0);
     this.add.image(789, 500, 'parchment').setScrollFactor(0).setFlipY(true);
 
 
-  
 
-
-  
-
+    // Narrative scene -> you have to read backwards
     const faq = this.add.sprite(450, 600, 'faq').setInteractive();
 
-    faq.on('pointerdown', function (pointer) {
+    faq.on('pointerdown', function(pointer) {
         this.setVisible(false); // Set the visibility to false when clicked
-        
+
+    });
+
+    const egyptScene = this.add.sprite(450, 600, 'shouldegypt').setInteractive();
+
+    egyptScene.on('pointerdown', function(pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+
+    });
+
+    const escapeScene2 = this.add.sprite(450, 600, 'escape2').setInteractive();
+
+    escapeScene2.on('pointerdown', function(pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+
+    });
+
+    const escapeScene1 = this.add.sprite(450, 600, 'escape1').setInteractive();
+
+    escapeScene1.on('pointerdown', function(pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+
+    });
+
+
+    const wakeScene = this.add.sprite(450, 600, 'awake').setInteractive();
+
+    wakeScene.on('pointerdown', function(pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+
+    });
+
+
+    const dreamScene = this.add.sprite(450, 600, 'dream').setInteractive();
+
+    dreamScene.on('pointerdown', function(pointer) {
+        this.setVisible(false); // Set the visibility to false when clicked
+
     });
 
     const begin = this.add.sprite(450, 600, 'start').setInteractive();
 
-    begin.on('pointerdown', function (pointer) {
+    begin.on('pointerdown', function(pointer) {
         this.setVisible(false); // Set the visibility to false when clicked
-        
+
     });
-   
 
 
+    // Game over scene to be called later
     gameOver = this.add.image(450, 600, 'end').setVisible(false);
 
-    
-    
 
-   
 }
 
+// Interaction through update function
+
 function update() {
+
+    // Player movement
     if (cursors.left.isDown) {
         player.setVelocityX(-160);
         player.anims.play('left', true);
@@ -322,44 +385,72 @@ function update() {
         player.setVelocityY(-275);
     }
 
+    // Displays winning when you win
+
     if (score === 5) {
         this.tweens.add({
             targets: flashlight,
             alpha: 0,
             duration: 2000,
-            onComplete: function () {
+            onComplete: function() {
                 flashlight.destroy();
+
+                // Make the winner image visible after the flashlight is destroyed
+
+                cluesCollected = this.add.image(450, 300, 'cluescollected').setVisible(true).setScrollFactor(0);
+
+
+                if (!this.winSound.isPlaying) {
+                    this.winSound.play();
+                }
+
+                this.tweens.add({
+                    targets: this.music,
+                    volume: 0,
+                    duration: 2000,
+                    onComplete: function() {
+                        // Stop the music after fading out
+                        this.music.stop();
+                    },
+                    callbackScope: this
+                });
+
+
             },
             callbackScope: this
         });
     }
 
+    // Calls game over screen if you lose
     if (currentHearts === 0) {
 
         if (!this.loseSound.isPlaying) {
             this.loseSound.play();
         }
-        
+
         gameOver = this.add.image(450, 600, 'end').setVisible(true);
-        
+
 
     }
 
- 
-  
+
+    // bounds of the flashlight
     flashlight.x = player.x + 25;
     flashlight.y = player.y + 25;
 }
 
+
+// The following collision functions are intended to destroy clues when encountering them
+
 function handleCollision() {
     if (!nefertiti.collided) {
         this.foundSound.play();
-        nefertiti.collided = true; // Set the flag to true to indicate collision
+        nefertiti.collided = true;
         this.tweens.add({
             targets: nefertiti,
             alpha: 0,
             duration: 1000,
-            onComplete: function () {
+            onComplete: function() {
                 nefertiti.destroy();
             },
             callbackScope: this
@@ -377,7 +468,7 @@ function handleCollisionS() {
             targets: sarcophagus,
             alpha: 0,
             duration: 1000,
-            onComplete: function () {
+            onComplete: function() {
                 sarcophagus.destroy();
             },
             callbackScope: this
@@ -387,7 +478,7 @@ function handleCollisionS() {
     }
 }
 
-function handleCollisionR () {
+function handleCollisionR() {
     if (!rosetta.collided) {
         this.foundSound.play();
         rosetta.collided = true;
@@ -395,7 +486,7 @@ function handleCollisionR () {
             targets: rosetta,
             alpha: 0,
             duration: 1000,
-            onComplete: function () {
+            onComplete: function() {
                 rosetta.destroy();
             },
             callbackScope: this
@@ -405,7 +496,7 @@ function handleCollisionR () {
     }
 }
 
-function handleCollisionZ () {
+function handleCollisionZ() {
     if (!zodiac.collided) {
         this.foundSound.play();
         zodiac.collided = true;
@@ -413,7 +504,7 @@ function handleCollisionZ () {
             targets: zodiac,
             alpha: 0,
             duration: 1000,
-            onComplete: function () {
+            onComplete: function() {
                 zodiac.destroy();
             },
             callbackScope: this
@@ -423,7 +514,7 @@ function handleCollisionZ () {
     }
 }
 
-function handleCollisionX () {
+function handleCollisionX() {
     if (!sphinx.collided) {
         this.foundSound.play();
         sphinx.collided = true;
@@ -431,7 +522,7 @@ function handleCollisionX () {
             targets: sphinx,
             alpha: 0,
             duration: 1000,
-            onComplete: function () {
+            onComplete: function() {
                 sphinx.destroy();
             },
             callbackScope: this
@@ -450,13 +541,13 @@ function incrementScore() {
 
 function handleWaterCollision(player, waterPlatform) {
     if (waterPlatform === water) {
-        // Check if the player has remaining hearts
+
         if (currentHearts > 0) {
-            // Update hearts
+
             currentHearts--;
             this.healthSound.play();
 
-            // Destroy the corresponding heart
+            // destroys hearts in order
             switch (currentHearts) {
                 case 2:
                     heart3.destroy();
@@ -469,12 +560,10 @@ function handleWaterCollision(player, waterPlatform) {
                     break;
             }
 
-            // Reset player position to x: 200, y: 500
+            // teleports player back after falling into the water
             player.setPosition(200, 500);
 
-            // Add any additional logic you want when the player collides with water
-            // For example, you can decrease health, play a sound, etc.
+
         }
     }
 }
-
