@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Robot Battle</title>
+<style>
+  body {
+    background-color: black;
+    color: whitesmoke; 
+    font-family: 'Courier New', Courier, monospace;
+    padding: 50px;
+    display: flex;
+  }
+
+  .left-column {
+    flex: 1;
+  }
+
+  .right-column {
+    flex: 1;
+    padding-left: 20px;
+  }
+
+  #robot {
+    width: 100px;
+    height: 100px;
+    background-color: red;
+    transition: background-color 1s ease-in-out;
+  }
+
+  .player-log {
+    color: lightgreen;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+
+  .scrapper-log {
+    color: lightpink;
+    padding: 5px;
+    margin: 5px 0;
+    border-radius: 5px;
+  }
+</style>
+</head>
+<body>
+<div class="left-column">
+  <div id="robot"></div>
+  <br>
+  <img src="https://i.postimg.cc/pdRNzJYM/faerietell-cute-really-big-robot-sadly-infected-with-dark-plant-33a61bf3-70a5-4c84-bf4f-2ad356c11e1e.png" width="200px">
+  <br>
+  <p>Your Health: <span id="playerHealth">10</span></p>
+  <p>Scrapper's Health: <span id="robotHealth">10</span></p>
+  <button onclick="throwRock()">Throw a rock</button>
+  <button onclick="jamScrewdriver()">Jam a screwdriver</button>
+  <button onclick="standInFrontOfTree()">Defend the tower</button>
+  <button onclick="heal()">Heal</button>
+</div>
+<div class="right-column">
+  <div id="actionLog"></div>
+</div>
+
+<script>
+  let playerHealth = 10;
+  let robotHealth = 10;
+  let isGreen = false;
+  const robotDiv = document.getElementById('robot');
+  const playerHealthSpan = document.getElementById('playerHealth');
+  const robotHealthSpan = document.getElementById('robotHealth');
+  const actionLogDiv = document.getElementById('actionLog');
+
+  setInterval(() => {
+    if (isGreen) {
+      isGreen = false;
+      changeColor();
+    } else {
+      isGreen = true;
+      changeColor();
+    }
+  }, 2000);
+
+  function throwRock() {
+    if (isGreen) {
+      const damage = 1;
+      logAction("You threw a rock at Scrapper. They lose " + damage + " health.", 'player-log');
+      robotHealth -= damage;
+      updateHealth();
+      robotAction();
+    } else {
+      alert("Oh, no! Scrapper has caught sight of you. Abort, abort!");
+      playerHealth -= 5;
+      updateHealth();
+    }
+  }
+
+  function jamScrewdriver() {
+    if (isGreen) {
+      const damage = 2;
+      logAction("You jammed a screwdriver into Scrapper's hardware. They lose " + damage + " health.", 'player-log');
+      robotHealth -= damage;
+      updateHealth();
+      robotAction();
+    } else {
+      alert("Oh, no! Scrapper has caught sight of you. Abort, abort!");
+      playerHealth -= 5;
+      updateHealth();
+    }
+  }
+
+  function standInFrontOfTree() {
+    if (isGreen) {
+      const playerDamage = 3;
+      const robotDamage = 3;
+      logAction("You stand in front of the communication tower to defend it. You and Scrapper both lose " + playerDamage + " health.", 'player-log');
+      playerHealth -= playerDamage;
+      robotHealth -= robotDamage;
+      updateHealth();
+      robotAction();
+    } else {
+      alert("Oh, no! Scrapper has caught sight of you. Abort, abort!");
+      playerHealth -= 5;
+      updateHealth();
+    }
+  }
+
+  function heal() {
+    if (isGreen) {
+      const healAmount = 2;
+      logAction("You healed yourself for " + healAmount + " points.", 'player-log');
+      playerHealth += healAmount;
+      updateHealth();
+      robotAction();
+    } else {
+      alert("Oh, no! Scrapper has caught sight of you. Abort, abort!");
+    }
+  }
+
+  function robotAction() {
+    const randomAction = Math.random();
+    if (randomAction < 0.15) {
+      // Malfunction action
+      logAction("Scrapper accidentally malfunctions and loses 1 health point.", 'scrapper-log');
+      robotHealth -= 1;
+      updateHealth();
+    } else if (randomAction < 0.5) {
+      // 35% chance for the high-pitched sound action
+      const playerDamage = 3;
+      logAction("Scrapper emitted a high-pitched sound not meant for human ears. You lose " + playerDamage + " health.", 'scrapper-log');
+      playerHealth -= playerDamage;
+      updateHealth();
+    } else {
+      // 50% chance for the debris action
+      const playerDamage = 1;
+      logAction("Scrapper accidentally sent debris your way. You lose " + playerDamage + " health.", 'scrapper-log');
+      playerHealth -= playerDamage;
+      updateHealth();
+    }
+  }
+
+  function changeColor() {
+    robotDiv.style.backgroundColor = isGreen ? 'green' : 'red';
+  }
+
+  function updateHealth() {
+    playerHealth = Math.min(playerHealth, 10); // Ensure player health doesn't exceed 10
+    playerHealthSpan.textContent = playerHealth;
+    robotHealthSpan.textContent = robotHealth;
+    checkGameOver();
+  }
+
+  function checkGameOver() {
+    if (playerHealth <= 0) {
+      alert("Unfortunately, you couldn't protect the communication tower from Scrapper. Try again?");
+      resetGame();
+    } else if (robotHealth <= 0) {
+      alert("YES! Mission success! The robot is shutting down...");
+      resetGame();
+    }
+  }
+
+  function resetGame() {
+    playerHealth = 10;
+    robotHealth = 10;
+    isGreen = false;
+    updateHealth();
+    changeColor();
+    actionLogDiv.textContent = '';
+  }
+
+  function logAction(action, logClass) {
+    const actionElement = document.createElement('p');
+    actionElement.textContent = action;
+    actionElement.classList.add(logClass);
+    actionLogDiv.appendChild(actionElement);
+  }
+</script>
+</body>
+</html>
