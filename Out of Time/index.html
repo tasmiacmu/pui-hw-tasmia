@@ -42,6 +42,37 @@
     margin: 5px 0;
     border-radius: 5px;
   }
+
+  /* Added CSS for the Guardian, Explorer, and Alchemist buttons */
+  #guardianButton {
+    background-color: purple;
+    color: whitesmoke;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  #explorerButton {
+    background-color: green;
+    color: whitesmoke;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
+
+  #alchemistButton {
+    background-color: blue;
+    color: whitesmoke;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 5px;
+  }
 </style>
 </head>
 <body>
@@ -56,6 +87,12 @@
   <button onclick="jamScrewdriver()">Jam a screwdriver</button>
   <button onclick="standInFrontOfTree()">Defend the tower</button>
   <button onclick="heal()">Heal</button>
+  <br>
+  <p style="color: yellow;">[SLEEPER BONUS] Your time asleep has given you a special power that can only be used once. This power is not impacted by the blind spots.</p>
+  <!-- Added Guardian, Explorer, and Alchemist buttons -->
+  <button id="guardianButton" onclick="sayNiceThingToScrapper()">Guardian</button>
+  <button id="explorerButton" onclick="talkToPlants()">Explorer</button>
+  <button id="alchemistButton" onclick="drinkConcoction()">Alchemist</button>
 </div>
 <div class="right-column">
   <div id="actionLog"></div>
@@ -134,6 +171,29 @@
     } else {
       alert("Oh, no! Scrapper has caught sight of you. Abort, abort!");
     }
+  }
+
+  function sayNiceThingToScrapper() {
+    // Compliment Scrapper
+    logAction("You tell Scrapper how shiny their helmet. Flustered by the compliment, they trip and lose 3 health points.", 'player-log');
+    robotHealth -= 3;
+    updateHealth();
+  }
+
+  function talkToPlants() {
+    // Talk to nearby plants
+    logAction("You have a deep conversation with the nearby plants. The robot seems uneasy and loses 3 health points.", 'player-log');
+    robotHealth -= 3;
+    updateHealth();
+    robotAction();
+  }
+
+  function drinkConcoction() {
+    // Drink a strange concoction
+    const healAmount = 3;
+    logAction("You drink a strange concoction of your own making. Miraculously, you feel better and regain 3 health points.", 'player-log');
+    playerHealth += healAmount;
+    updateHealth();
   }
 
   function robotAction() {

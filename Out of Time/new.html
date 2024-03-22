@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Heart Puzzle Game</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    #puzzle-container {
+        width: 80vw;
+        max-width: 400px;
+        height: 80vw;
+        max-height: 400px;
+        border: 2px solid #000;
+        position: relative;
+        margin: 20px auto;
+    }
+    .puzzle-piece {
+        position: absolute;
+        cursor: pointer;
+    }
+    #reset-btn,
+    #solve-btn {
+        display: block;
+        margin: 20px auto;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        cursor: pointer;
+    }
+</style>
+</head>
+<body>
+<div id="puzzle-container">
+    <!-- SVG paths for heart shape pieces -->
+    <div id="piece1" class="puzzle-piece" draggable="true"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0000" d="M50 15 A 20 20 0 0 0 30 35 L 50 60 L 70 35 A 20 20 0 0 0 50 15 Z"/></svg></div>
+    <div id="piece2" class="puzzle-piece" draggable="true"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0000" d="M50 15 A 20 20 0 0 0 70 35 L 50 60 L 30 35 A 20 20 0 0 0 50 15 Z"/></svg></div>
+    <div id="piece3" class="puzzle-piece" draggable="true"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0000" d="M50 15 A 20 20 0 0 0 35 25 L 50 40 L 65 25 A 20 20 0 0 0 50 15 Z"/></svg></div>
+    <div id="piece4" class="puzzle-piece" draggable="true"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0000" d="M50 15 A 20 20 0 0 0 65 25 L 50 40 L 35 25 A 20 20 0 0 0 50 15 Z"/></svg></div>
+    <div id="piece5" class="puzzle-piece" draggable="true"><svg width="100%" height="100%" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="#FF0000" d="M30 55 Q 50 90 70 55 Q 50 75 30 55 Z"/></svg></div>
+</div>
+<button id="reset-btn">Reset</button>
+<button id="solve-btn">Solve</button>
+
+<script>
+    const pieces = document.querySelectorAll('.puzzle-piece');
+    const puzzleContainer = document.getElementById('puzzle-container');
+    const resetBtn = document.getElementById('reset-btn');
+    const solveBtn = document.getElementById('solve-btn');
+
+    let isDragging = false;
+
+    pieces.forEach(piece => {
+        piece.addEventListener('dragstart', dragStart);
+        piece.addEventListener('dragend', dragEnd);
+    });
+
+    puzzleContainer.addEventListener('dragover', dragOver);
+    puzzleContainer.addEventListener('drop', drop);
+
+    function dragStart(event) {
+        isDragging = true;
+        event.dataTransfer.setData('text/plain', event.target.id);
+    }
+
+    function dragEnd() {
+        isDragging = false;
+        this.classList.remove('dragging');
+    }
+
+    function dragOver(event) {
+        event.preventDefault();
+    }
+
+    function drop(event) {
+        event.preventDefault();
+        if (isDragging) {
+            const pieceId = event.dataTransfer.getData('text/plain');
+            const droppedPiece = document.getElementById(pieceId);
+            const rect = puzzleContainer.getBoundingClientRect();
+            const offsetX = event.clientX - rect.left;
+            const offsetY = event.clientY - rect.top;
+            droppedPiece.style.left = offsetX - 50 + 'px';
+            droppedPiece.style.top = offsetY - 50 + 'px';
+            isDragging = false;
+        }
+    }
+
+    resetBtn.addEventListener('click', () => {
+        pieces.forEach(piece => {
+            piece.style.left = '';
+            piece.style.top = '';
+        });
+    });
+
+    solveBtn.addEventListener('click', () => {
+        // Hardcoded positions to form a heart shape
+        const positions = [
+            { left: '20%', top: '20%' },
+            { left: '50%', top: '20%' },
+            { left: '80%', top: '20%' },
+            { left: '35%', top: '50%' },
+            { left: '65%', top: '50%' }
+        ];
+
+        pieces.forEach((piece, index) => {
+            piece.style.left = positions[index].left;
+            piece.style.top = positions[index].top;
+        });
+    });
+</script>
+</body>
+</html>
