@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Girl and Robot</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+        background-color: black;
+        color: white;
+        padding: 10px;
+    }
+
+    .image-container {
+        display: flex;
+        justify-content: center;
+        margin-bottom: 10px;
+    }
+
+    .image-container img {
+        max-width: 150px;
+        height: auto;
+        margin: 0 5px;
+    }
+
+    .emoji-container {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .mood-container {
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .mood-container span {
+        flex-grow: 1;
+    }
+
+    .girl-mood {
+        color: green;
+    }
+
+    .robot-mood {
+        color: red;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 20px;
+    }
+
+    .button-container button {
+        margin: 5px;
+        padding: 10px 15px;
+        font-size: 14px;
+        cursor: pointer;
+    }
+
+    #actionText {
+        font-size: 16px;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <h2 id="turn">Your Turn</h2>
+    <p id="actionText"></p>
+    <div class="image-container">
+        <img src="https://i.ibb.co/jzBk9HH/Talk-to-Scrapper.png" alt="Player">
+        <img src="https://i.ibb.co/CWqW5ZH/Scary.png" alt="Scrapper">
+    </div>
+    <div class="mood-container">
+        <span class="girl-mood" id="girlMood">Mood: 😊😊😊😊😊</span>
+        <span class="robot-mood" id="robotMood">Mood: 😊😊😊😊😊</span>
+    </div>
+    <div class="button-container">
+        <button onclick="playerAction('rock')">Rock</button>
+        <button onclick="playerAction('screwdriver')">Screwdriver</button>
+        <button onclick="playerAction('defend')">Defend</button>
+    </div>
+    
+</div>
+
+<script>
+    let girlMood = 5;
+    let robotMood = 5;
+    let isPlayersTurn = true;
+
+    function updateMood() {
+        let girlMoodEmojis = "😊".repeat(girlMood);
+        let robotMoodEmojis = "😊".repeat(robotMood);
+        document.getElementById("girlMood").textContent = "Mood: " + girlMoodEmojis;
+        document.getElementById("robotMood").textContent = "Mood: " + robotMoodEmojis;
+    }
+
+    function playerAction(action) {
+        if (isPlayersTurn) {
+            if (action === 'rock') {
+                if (robotMood > 0) {
+                    robotMood--;
+                    updateMood();
+                    endTurn();
+                }
+            } else if (action === 'screwdriver') {
+                if (robotMood >= 2) {
+                    robotMood -= 2;
+                    updateMood();
+                    endTurn();
+                } else if (robotMood === 1) {
+                    robotMood--;
+                    updateMood();
+                    endTurn();
+                }
+            } else if (action === 'defend') {
+                if (girlMood < 5) {
+                    girlMood++;
+                    updateMood();
+                    endTurn();
+                }
+            }
+        }
+    }
+
+    function endTurn() {
+        isPlayersTurn = false;
+        document.getElementById("turn").textContent = "Scrapper's Turn";
+        setTimeout(scrapperAction, 1000);
+    }
+
+    function scrapperAction() {
+        let randomAction = Math.random();
+        if (randomAction < 0.33) {
+            // 1/3 chance to emit high-pitched sound
+            document.getElementById("actionText").textContent = "Scrapper emits a high-pitched sound! Ouch, your human ears can't take this damage!";
+            girlMood--;
+        } else if (randomAction < 0.67) {
+            // 1/3 chance to attack the tower
+            document.getElementById("actionText").textContent = "Scrapper sends debris flying in your direction.";
+            girlMood -= 2;
+        } else {
+            // 1/3 chance to upgrade and gain 3 smiley faces
+            if (robotMood <= 0) {
+                document.getElementById("actionText").textContent = "Scrapper cannot be so easily defeated. He powers back on.";
+                robotMood += 3;
+            } else {
+                document.getElementById("actionText").textContent = "Scrapper upgrades... and suddenly, he's more powerful than before!";
+                robotMood += 3;
+            }
+        }
+        updateMood();
+        checkGameOver();
+    }
+
+    function checkGameOver() {
+        if (girlMood <= 0) {
+            girlMood = 0;
+            updateMood();
+            alert("Oh no! You have failed. Your mood has been reduced by 1 point.");
+        }
+        setTimeout(resetTurn, 2000);
+    }
+
+    function resetTurn() {
+        isPlayersTurn = true;
+        document.getElementById("turn").textContent = "Your Turn";
+        document.getElementById("actionText").textContent = "";
+    }
+</script>
+</body>
+</html>
