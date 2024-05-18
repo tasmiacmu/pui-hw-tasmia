@@ -25,6 +25,9 @@
       color: white;
       font-size: 2em;
       text-align: center;
+      user-select: none; /* Prevent text selection */
+      -webkit-user-drag: none; /* Prevent dragging */
+      touch-action: none; /* Disable default touch actions */
     }
   </style>
 </head>
@@ -34,10 +37,31 @@
   </div>
 
   <script>
-    document.querySelector('.touch-area').addEventListener('touchstart', function() {
-      if (navigator.vibrate) {
-        navigator.vibrate(100); // Vibrate for 100 milliseconds
-      }
+    // Ensure the document is fully loaded before adding event listeners
+    document.addEventListener('DOMContentLoaded', function() {
+      const touchArea = document.querySelector('.touch-area');
+      touchArea.addEventListener('touchstart', function(event) {
+        // Prevent default touch behavior
+        event.preventDefault();
+        
+        // Check for vibration support and trigger vibration
+        if (navigator.vibrate) {
+          console.log('Device supports vibration.');
+          navigator.vibrate(100); // Vibrate for 100 milliseconds
+        } else {
+          console.log('Vibration API not supported on this device.');
+        }
+      });
+
+      // Add click event listener for desktop testing
+      touchArea.addEventListener('click', function(event) {
+        console.log('Click event detected.');
+        if (navigator.vibrate) {
+          navigator.vibrate(100); // Vibrate for 100 milliseconds
+        } else {
+          console.log('Vibration API not supported on this device.');
+        }
+      });
     });
   </script>
 </body>
