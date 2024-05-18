@@ -32,6 +32,15 @@
         const maxIntervals = 6;
         const iconURL = "https://png.pngtree.com/png-vector/20221127/ourmid/pngtree-tree-twig-vector-branch-family-png-image_6480166.png";
 
+        function vibrateDevice(pattern) {
+            if ("vibrate" in navigator) {
+                navigator.vibrate(pattern);
+                console.log("Vibration triggered: ", pattern);
+            } else {
+                console.log("Vibration API not supported on this device.");
+            }
+        }
+
         function showBranchIcon() {
             // Create branch icon
             const branchIcon = document.createElement("img");
@@ -40,15 +49,11 @@
             document.body.appendChild(branchIcon);
 
             // Low vibration when the icon appears
-            if (navigator.vibrate) {
-                navigator.vibrate(200);
-            }
+            vibrateDevice(200);
 
             // Event listener for tapping the icon
             branchIcon.addEventListener("touchstart", () => {
-                if (navigator.vibrate) {
-                    navigator.vibrate([50, 100, 50]); // Sharp quick vibration
-                }
+                vibrateDevice([50, 100, 50]); // Sharp quick vibration
                 tapCount++;
                 branchIcon.remove();
             });
