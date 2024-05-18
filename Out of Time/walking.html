@@ -23,9 +23,15 @@
             transform: translate(-50%, -50%);
             cursor: pointer;
         }
+        #startButton {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
+    <button id="startButton">Start</button>
     <script>
         let tapCount = 0;
         let intervals = 0;
@@ -33,7 +39,7 @@
         const iconURL = "https://png.pngtree.com/png-vector/20221127/ourmid/pngtree-tree-twig-vector-branch-family-png-image_6480166.png";
 
         function vibrateDevice(pattern) {
-            if ("vibrate" in navigator) {
+            if (navigator.vibrate) {
                 navigator.vibrate(pattern);
                 console.log("Vibration triggered: ", pattern);
             } else {
@@ -52,6 +58,12 @@
             vibrateDevice(200);
 
             // Event listener for tapping the icon
+            branchIcon.addEventListener("click", () => {
+                vibrateDevice([50, 100, 50]); // Sharp quick vibration
+                tapCount++;
+                branchIcon.remove();
+            });
+
             branchIcon.addEventListener("touchstart", () => {
                 vibrateDevice([50, 100, 50]); // Sharp quick vibration
                 tapCount++;
@@ -76,8 +88,13 @@
             }
         }
 
-        // Set interval to run every 20 seconds
-        const mainInterval = setInterval(intervalFunction, 20000);
+        document.getElementById("startButton").addEventListener("click", () => {
+            vibrateDevice(200); // Initial vibration
+            document.getElementById("startButton").remove(); // Remove start button
+            // Set interval to run every 20 seconds
+            const mainInterval = setInterval(intervalFunction, 20000);
+            intervalFunction(); // Trigger the first interval immediately
+        });
     </script>
 </body>
 </html>
