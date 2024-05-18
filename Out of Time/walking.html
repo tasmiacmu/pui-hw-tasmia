@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Branch Icon Interaction</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        #branchIcon {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let tapCount = 0;
+        let intervals = 0;
+        const maxIntervals = 6;
+        const iconURL = "https://png.pngtree.com/png-vector/20221127/ourmid/pngtree-tree-twig-vector-branch-family-png-image_6480166.png";
+
+        function showBranchIcon() {
+            // Create branch icon
+            const branchIcon = document.createElement("img");
+            branchIcon.id = "branchIcon";
+            branchIcon.src = iconURL;
+            document.body.appendChild(branchIcon);
+
+            // Low vibration when the icon appears
+            if (navigator.vibrate) {
+                navigator.vibrate(200);
+            }
+
+            // Event listener for tapping the icon
+            branchIcon.addEventListener("touchstart", () => {
+                if (navigator.vibrate) {
+                    navigator.vibrate([50, 100, 50]); // Sharp quick vibration
+                }
+                tapCount++;
+                branchIcon.remove();
+            });
+
+            // Remove the icon after 2 seconds if not tapped
+            setTimeout(() => {
+                if (document.body.contains(branchIcon)) {
+                    branchIcon.remove();
+                }
+            }, 2000);
+        }
+
+        function intervalFunction() {
+            if (intervals < maxIntervals) {
+                showBranchIcon();
+                intervals++;
+            } else {
+                clearInterval(mainInterval);
+                alert(`You tapped the branch icon ${tapCount} times.`);
+            }
+        }
+
+        // Set interval to run every 20 seconds
+        const mainInterval = setInterval(intervalFunction, 20000);
+    </script>
+</body>
+</html>
